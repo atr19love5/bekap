@@ -117,7 +117,7 @@ def jam():
     jamm = now.strftime("%m/%d/%Y, %H:%M:%S")
     minut = now.strftime("%M")
     secc = now.strftime("%S")
-    if int(minut)%40==0 and secc=="00":
+    if int(minut)%40==0 and int(minut)!=0 and secc=="00":
         print("•>> "+str(jamm))
         return True
     else:
