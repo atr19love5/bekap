@@ -2,16 +2,16 @@
 import subprocess
 import pyrebase
 import json
-config = {
-    "apiKey": "AIzaSyATkiylea79HwAQNoJHDa5XLCK6b7kK1Ys",
-    "authDomain": "bling-1b0b0.firebaseapp.com",
-    "databaseURL": "https://bling-1b0b0-default-rtdb.asia-southeast1.firebasedatabase.app",
-    "projectId": "bling-1b0b0",
-    "storageBucket": "bling-1b0b0.appspot.com",
-    "messagingSenderId": "489126684041",
-    "appId": "1:489126684041:web:0f6978ddf5f9b9929bed58"
-}
-
+config=json.loads(open("dbaddrs.json","r").read())
+# config = {
+#     "apiKey": "AIzaSyATkiylea79HwAQNoJHDa5XLCK6b7kK1Ys",
+#     "authDomain": "bling-1b0b0.firebaseapp.com",
+#     "databaseURL": "https://bling-1b0b0-default-rtdb.asia-southeast1.firebasedatabase.app",
+#     "projectId": "bling-1b0b0",
+#     "storageBucket": "bling-1b0b0.appspot.com",
+#     "messagingSenderId": "489126684041",
+#     "appId": "1:489126684041:web:0f6978ddf5f9b9929bed58"
+# }
 
 firebase = pyrebase.initialize_app(config)
 db = firebase.database()
@@ -30,7 +30,7 @@ while True:
     #                      "force_new": "2", "invite_code": "", "registration_id": "18071adc03cc524e255", "sign": "bf19ff6a5789fcd53fd2f8c9d2146098"}
     tet = 1
     for ppp in dbb["results"]:
-        print(f'{tet}. {ppp["sign"]}')
+        print(f'{tet}. {json.dumps(ppp)}')
         tet += 1
 
     print(f"total uid : {len(dbb['results'])}")
@@ -41,5 +41,5 @@ while True:
 
     # print(json.dumps(dbb, indent=2))
     db.child("account").child("uid").update(dbb)
-    input("Press Enter to Delete Packages")
-    process = subprocess.Popen(['rm', '-rf', f'{patt}/packages'])
+    if input("Press Enter to Delete Packages")=="":
+        process = subprocess.Popen(['rm', '-rf', f'{patt}/packages'])

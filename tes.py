@@ -1,9 +1,13 @@
+import json
 
+import pyrebase
 
+config=json.loads(open("dbaddrs.json","r").read())
+firebase = pyrebase.initialize_app(config)
+db = firebase.database()
 
-klp="123aaaaaaaaaaaaaaaaaaaaa456"
-print(klp[-3:])
-
+req = db.child('account').child('uid').child('results').child(0).get().val()
+print(json.dumps(req))
 
 
 
