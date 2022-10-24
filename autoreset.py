@@ -34,12 +34,12 @@ def loginid(x):
     # exit()
 
     try:
-        req = requests.post(uri, data=json.dumps(param), headers=headers)
+        req = requests.post(uri, data=json.dumps(param), headers=headers,timeout=10)
         ress = json.loads(req.text)
         return ress
     except Exception as e:
         print("Failed : "+str(e))
-        return 0
+        return ress
 def getinfo(x):
     uriweb = "https://wjxwd01mwyo.dt01showxx02.com/App/User_User/Info"
     headers = {
@@ -81,27 +81,30 @@ jeda=float(5.0)
 
 def cekreset():
     for itr in range(itrawal,len(base['acc']),1):
-        cekakun=getinfo(base['token'][itr])
+        try:
+            tokenakun=base['token'][itr]
+            cekakun=getinfo(tokenakun)
+        except Exception as e:
+            cekakun=['expiret','expiret','expiret','expiret']
         if cekakun[3] == "expiret":
             for x in range(random.randint(jeda,jeda+10),0,-1):
                 sys.stdout.write(f"  {x}   \r")
                 sys.stdout.flush()
                 time.sleep(1)
             print(f"______________[ login ]_______________[{itr}]")
-            refreshtkn = loginid(db.child('account').child('uid').child('results').child(itr).get().val())
-            # print(tkn)
             while True:
-                if refreshtkn!=0:
-                    if refreshtkn["code"] == 0:
-                        bnama,bkoin,bvip,vid=refreshtkn["result"]["nickname"],refreshtkn["result"]["balance"],refreshtkn["result"]["vip_name"],refreshtkn["result"]["show_id"]
-                        dissp=[bnama,bkoin,bvip,vid]
-                        print(f'{dissp}')
-                        tokenbaru = refreshtkn["result"]["access_token"]
-                        db.child('account').child('token').child('results').update({itr:tokenbaru})
-                        break
-                            
+                refreshtkn = loginid(db.child('account').child('uid').child('results').child(itr).get().val())
+                # print(refreshtkn)
+                if refreshtkn["code"] == 0:
+                    bnama,bkoin,bvip,vid=refreshtkn["result"]["nickname"],refreshtkn["result"]["balance"],refreshtkn["result"]["vip_name"],refreshtkn["result"]["show_id"]
+                    dissp=[bnama,bkoin,bvip,vid]
+                    print(f'{dissp}')
+                    tokenbaru = refreshtkn["result"]["access_token"]
+                    db.child('account').child('token').child('results').update({itr:tokenbaru})
+                    break
                 else:
-                    print(f"  [{itr}]  request eror : {refreshtkn}")
+                    print(refreshtkn["msg"])
+                time.sleep(5)
         else:
             for x in range(2,0,-1):
                 sys.stdout.write(f"  {x}   \r")
