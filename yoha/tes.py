@@ -1,10 +1,14 @@
-import pytz
-from datetime import datetime
+import pyrebase,json,getapi
+
+config=json.loads(open("dbaddrs.json","r").read())
 
 
+firebase = pyrebase.initialize_app(config)
+db = firebase.database()
 
-tz = pytz.timezone("Asia/Jakarta")                               #2022-10-20 05:04:10
-now = datetime.now(tz)
-waktu = now.strftime("%Y-%m-%d %H:%M:%S")
-print(waktu)
-input()
+tkn = db.child('yoha').child('token').child("results").child(4).get().val()
+
+print(tkn)
+xxp=getapi.claim(tkn)
+
+print(xxp)

@@ -92,12 +92,13 @@ def profile(token):
             return 0
 
 
-def claim(token, days):
+def claim(token):
     head = {
-        "authorization": token,
         "host": "api.yoha.pro",
+        "authorization": token,
         "accept": "application/json",
         "content-type": "application/json; charset=utf-8",
+        "accept-encoding":"gzip",
         "user-agent": f"Mozilla/5.0 (iPhone11,2; U; CPU iPhone OS 14_0 like Mac OS X) AppleWebKit/602.{rdm.randint(0,255)}.{rdm.randint(0,255)} (KHTML, like Gecko) Version/9.0 Mobile/{rdm.randint(11,99)}E{rdm.randint(111,999)} Safari/602.1"
     }
     
@@ -114,6 +115,19 @@ def claim(token, days):
         "ip": aipi,
         "l": "in"
     }
+    # link
+    uri = f'{data["api"]}live/im/link'
+    r = httpx.get(uri, headers=headapi)
+    if r.status_code == 200:
+        ress = (json.loads(r.text))
+        if ress['status'] != "error":
+            print(f"link: {ress['status']}")
+    # report
+    uri = f'{data["api"]}live/report/config'
+    r = httpx.post(uri, params=param1, headers=headapi)
+    if r.status_code == 200:
+        ress = (json.loads(r.text))
+        print(f"report : {ress['status']}")
     # config
     uri = f'{data["host"]}api/live/config'
     r = httpx.post(uri, params=param1, headers=head)
@@ -159,33 +173,6 @@ def claim(token, days):
     if r.status_code == 200:
         ress = (json.loads(r.text))
         print(f"Entry : {ress['status']}")
-    # # Giftlist
-    # uri = f'{data["api"]}live/getGiftList'
-    # r = httpx.post(uri,params=param1, headers=headapi)
-    # if r.status_code == 200:
-    #     ress = (json.loads(r.text))
-    #     print(f"Giftlist : {ress['status']}")
-    # # videolist
-    # uri = f'{data["host"]}api/video/list?type=1&page=1&page_size=20&is_random=1&live_recommend=1&v={persi}&ip={aipi}&l=in'
-    # r = httpx.get(uri, headers=head)
-    # if r.status_code == 200:
-    #     ress = (json.loads(r.text))
-    #     if ress['status'] != "error":
-    #         print(f"video1 : {ress['status']}")
-    # # videolist2
-    # uri = f'{data["host"]}api/video/list?type=0&page=1&page_size=20&is_random=1&live_recommend=1&v={persi}&ip={aipi}&l=in'
-    # r = httpx.get(uri, headers=head)
-    # if r.status_code == 200:
-    #     ress = (json.loads(r.text))
-    #     if ress['status'] != "error":
-    #         print(f"video2 : {ress['status']}")
-    # # ranking
-    # uri = f'{data["api"]}live/game/ranking/config?v={persi}&ip={aipi}&l=in'
-    # r = httpx.get(uri, headers=headapi)
-    # if r.status_code == 200:
-    #     ress = (json.loads(r.text))
-    #     if ress['status'] != "error":
-    #         print(f"ranking : {ress['data']['status']}")
     # Auth
     uri = f'{data["host"]}api/auth/me?v={persi}&ip={aipi}&l=in'
     r = httpx.get(uri, headers=head)
@@ -197,13 +184,13 @@ def claim(token, days):
     # sign
     uri = f'{data["host"]}api/signs/init?v={persi}&ip={aipi}&l=in'
     r = httpx.get(uri, headers=head)
+    dsign=json.loads(r.text)
     if r.status_code == 200:
         ress = (json.loads(r.text))
         if ress['status'] != "error":
             print(
                 f"Sign before claim : {ress['status']}")
     # Log
-    
     uri = f'{data["host"]}api/log/app'
     tz = pytz.timezone("Asia/Jakarta")                               #2022-10-20 05:04:10
     now = datetime.now(tz)
@@ -227,14 +214,29 @@ def claim(token, days):
     if r.status_code == 200:
         ress = (json.loads(r.text))
         print(f"log : {ress['status']}")   
-    # claim step2
-    uri = f'{data["host"]}api/signs/store'
-    param2={'day':days,'sign_id':'8','v':persi,'ip':aipi,'l':'in'}
-    r = httpx.post(uri, data=param1, params=param2, headers=head)
+    # poll
+    uri = f'{data["host"]}api/tasks/userPoll'
+    r = httpx.post(uri, params=param1, headers=head)
     if r.status_code == 200:
         ress = (json.loads(r.text))
         if ress["status"] == "success":
-            msg = c('green', ress['data']['amount'], 0)
+            msg = c('green', ress['status'], 0)
+            print(f"poll : {msg}")
+        else:
+            msg = f"{c('red',ress,0)}"
+            print(f"poll : {msg}")
+    # claim step2
+    uri = f'{data["host"]}api/signs/store'
+    harike=dsign["data"]["sign_status"]
+    idsign=dsign["data"]["list"][harike-1]["id"]
+    print(f"  Harike {harike}")
+    print(f"  Idsign {idsign}")
+    param2={"day":str(harike),"sign_id":str(idsign),"v":persi,"ip":aipi,"l":"in"}
+    r = httpx.post(uri, data=param1, params=json.dumps(param2), headers=head)
+    if r.status_code == 200:
+        ress = (json.loads(r.text))
+        if ress["status"] == "success":
+            msg = c('green', ress, 0)
             print(f"Claim : {msg}")
         else:
             msg = f"{c('red',ress,0)}"
@@ -498,7 +500,7 @@ def login(no, passw):
         "user_login": no,
         "user_pass": passw,
         "user_email": "",
-        "source": "",
+        "source": "android",
         "v": persi,
         "ip": aipi,
         "l": "in",

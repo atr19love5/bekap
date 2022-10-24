@@ -75,12 +75,12 @@ def getinfo(x):
             print("Reconnect")
     return krm
 
-ataroinvcode = "yBooNa"
+ataroinvcode = ""
 base={}
 jeda=float(5.0)
 
 def cekreset():
-    for itr in range(len(base['acc'])):
+    for itr in range(itrawal,len(base['acc']),1):
         cekakun=getinfo(base['token'][itr])
         if cekakun[3] == "expiret":
             for x in range(random.randint(jeda,jeda+10),0,-1):
@@ -125,9 +125,14 @@ def jam():
         sys.stdout.flush()
         return False
 
-
+try:
+    tes=True
+    itrawal=int(sys.argv[1])
+except:itrawal=0
+#tes py autoreset.py tokenawal
+#normal py autoreset.py
 while True:
-    if jam():
+    if jam() or tes:
         print("•>> Melakukan Cek Token")
         base["token"]=ambil.token()
         base["acc"]=ambil.uid()
