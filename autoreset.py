@@ -39,6 +39,13 @@ def loginid(x):
         return ress
     except Exception as e:
         print("Failed : "+str(e))
+        ress = {"result":{
+            "nickname":str(e),
+            "balance":"0",
+            "vip_name":"0",
+            "show_id":"0",
+            "access_token":"0",
+            }}
         return ress
 def getinfo(x):
     uriweb = "https://wjxwd01mwyo.dt01showxx02.com/App/User_User/Info"
@@ -120,7 +127,7 @@ def jam():
     jamm = now.strftime("%m/%d/%Y, %H:%M:%S")
     minut = now.strftime("%M")
     secc = now.strftime("%S")
-    if int(minut)%40==0 and int(minut)!=0 and secc=="00":
+    if int(minut)%30==0 and int(minut)!=0 and secc=="00":
         print("•>> "+str(jamm))
         return True
     else:
@@ -131,7 +138,10 @@ def jam():
 try:
     tes=True
     itrawal=int(sys.argv[1])
-except:itrawal=0
+    print("TEEEEEEEEES")
+except:
+    tes=False
+    itrawal=0
 #tes py autoreset.py tokenawal
 #normal py autoreset.py
 while True:
