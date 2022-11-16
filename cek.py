@@ -70,7 +70,7 @@ def oweb(url):
 def loginid(x):
     uri = "https://wjxwd01mwyo.dt01showxx02.com/App/User_LoginRegister/Login"
     headers = {
-        "User-Agent": f"HS-Android Mozilla/5.0 (Linux; Android 8.1.0; SM-J730F Build/{random.randint(1000,9999)}; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/103.0.{random.randint(1000,9999)}.129 Mobile Safari/537.36",
+        "User-Agent": f"HS-IOS_iOSLV2/2.10.4 (iPhone;iOS 15.5; Scale/3.00",
         "BundleIdentifier": "user",
         "Accept-Encoding": "identity",
         "X-Version": persi,
@@ -99,7 +99,7 @@ def loginid(x):
 def logingame(x):
     uri = "https://wjxwd01mwyo.dt01showxx02.com/App/ThirdGame_Index/Login"
     headers = {
-        "User-Agent": f"HS-Android Mozilla/5.0 (Linux; Android 8.1.0; SM-J730F Build/{random.randint(1000,9999)}; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/103.0.{random.randint(1000,9999)}.129 Mobile Safari/537.36",
+        "User-Agent": f"HS-IOS_iOSLV2/2.10.4 (iPhone;iOS 15.5; Scale/3.00",
         "BundleIdentifier": "user",
         "Accept-Encoding": "identity",
         "X-Version": persi,
@@ -169,7 +169,7 @@ def logingame(x):
 def getbankinfo(x):
     uriweb = "https://wjxwd01mwyo.dt01showxx02.com/App/Pay_BankCard/Mine"
     headers = {
-        "user-agent": f"HS-Android Mozilla/5.0 (Linux; Android 8.1.0; SM-J730F Build/{random.randint(1000,9999)}; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/103.0.{random.randint(1000,9999)}.129 Mobile Safari/537.36",
+        "user-agent": f"HS-IOS_iOSLV2/2.10.4 (iPhone;iOS 15.5; Scale/3.00",
         "bundleidentifier": "user",
         "x-token": x,
         "accept-encoding": "identity",
@@ -188,19 +188,18 @@ def getbankinfo(x):
 def setpwd(x, pwnya):
     uri = "https://wjxwd01mwyo.dt01showxx02.com/App/Pay_User/SetPwd"
     headers = {
-        "User-Agent": f"HS-Android Mozilla/5.0 (Linux; Android 8.1.0; SM-J730F Build/{random.randint(1000,9999)}; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/103.0.{random.randint(1000,9999)}.129 Mobile Safari/537.36",
+        "User-Agent": f"HS-IOS_iOSLV2/2.10.4 (iPhone;iOS 15.5; Scale/3.00",
         "BundleIdentifier": "user",
         "Accept-Encoding": "identity",
         "x-token": x,
         "X-Version": persi,
-        "Content-Type": "application/json; charset=UTF-8",
+        "Content-Type": "application/x-www-form-urlencoded",
         "Host": "wjxwd01mwyo.dt01showxx02.com",
         "Connection": "Keep-Alive"
     }
-    param = {'pwd': pwnya}
-
+    datas=f"pwd={pwnya}"
     try:
-        req = requests.post(uri, data=json.dumps(param), headers=headers)
+        req = requests.post(uri, data=datas, headers=headers)
         ress = json.loads(req.text)
         return ress
     except Exception as e:
@@ -211,7 +210,7 @@ def setpwd(x, pwnya):
 def setemail(tkn, email, code):
     uri = "https://wjxwd01mwyo.dt01showxx02.com/App/User_User/BindEmail"
     headers = {
-        "User-Agent": f"HS-Android Mozilla/5.0 (Linux; Android 8.1.0; SM-J730F Build/{random.randint(1000,9999)}; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/103.0.{random.randint(1000,9999)}.129 Mobile Safari/537.36",
+        "User-Agent": f"HS-IOS_iOSLV2/2.10.4 (iPhone;iOS 15.5; Scale/3.00",
         "BundleIdentifier": "user",
         "x-token": tkn,
         "Accept-Encoding": "identity",
@@ -220,13 +219,10 @@ def setemail(tkn, email, code):
         "Host": "wjxwd01mwyo.dt01showxx02.com",
         "Connection": "Keep-Alive"
     }
-    param = {
-        "email": email,
-        "code": code
-    }
+    datas=f"email={email}&code={code}"
 
     try:
-        req = requests.post(uri, data=param, headers=headers)
+        req = requests.post(uri, data=datas, headers=headers)
         ress = json.loads(req.text)
         return ress["msg"]
     except Exception as e:
@@ -234,49 +230,49 @@ def setemail(tkn, email, code):
         return 0
 
 
-def setphone(tkn, phone, code):
-    uri = "https://wjxwd01mwyo.dt01showxx02.com/App/User_User/BindPhone"
-    headers = {
-        "User-Agent": f"HS-Android Mozilla/5.0 (Linux; Android 8.1.0; SM-J730F Build/{random.randint(1000,9999)}; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/103.0.{random.randint(1000,9999)}.129 Mobile Safari/537.36",
-        "BundleIdentifier": "user",
-        "x-token": tkn,
-        "Accept-Encoding": "identity",
-        "X-Version": persi,
-        "Content-Type": "application/x-www-form-urlencoded",
-        "Host": "wjxwd01mwyo.dt01showxx02.com",
-        "Connection": "Keep-Alive"
-    }
-    param = {
-        "email": "+62",
-        "email": phone,
-        "code": code
-    }
+# def setphone(tkn, phone, code):
+#     uri = "https://wjxwd01mwyo.dt01showxx02.com/App/User_User/BindPhone"
+#     headers = {
+#         "User-Agent": f"HS-IOS_iOSLV2/2.10.4 (iPhone;iOS 15.5; Scale/3.00",
+#         "BundleIdentifier": "user",
+#         "x-token": tkn,
+#         "Accept-Encoding": "identity",
+#         "X-Version": persi,
+#         "Content-Type": "application/json; charset=UTF-8",
+#         "Host": "wjxwd01mwyo.dt01showxx02.com",
+#         "Connection": "Keep-Alive"
+#     }
+#     param = {
+#         # "email": "+62",
+#         "email": phone,
+#         "code": code
+#     }
 
-    try:
-        req = requests.post(uri, data=param, headers=headers)
-        ress = json.loads(req.text)
-        return ress["msg"]
-    except Exception as e:
-        print("Failed : "+str(e))
-        return 0
+#     try:
+#         req = requests.post(uri, data=param, headers=headers)
+#         ress = json.loads(req.text)
+#         return ress["msg"]
+#     except Exception as e:
+#         print("Failed : "+str(e))
+#         return 0
 
 
 def setbank(x, data):
     uri = "https://wjxwd01mwyo.dt01showxx02.com/App/Pay_BankCard/Add"
     headers = {
-        "User-Agent": f"HS-Android Mozilla/5.0 (Linux; Android 8.1.0; SM-J730F Build/{random.randint(1000,9999)}; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/103.0.{random.randint(1000,9999)}.129 Mobile Safari/537.36",
+        "User-Agent": f"HS-IOS_iOSLV2/2.10.4 (iPhone;iOS 15.5; Scale/3.00",
         "BundleIdentifier": "user",
         "Accept-Encoding": "identity",
         "x-token": x,
         "X-Version": persi,
-        "Content-Type": "application/json; charset=UTF-8",
+        "Content-Type": "application/x-www-form-urlencoded",
         "Host": "wjxwd01mwyo.dt01showxx02.com",
         "Connection": "Keep-Alive"
     }
-    param = data
+    datas=f'name={data["name"]}&number={data["number"]}&type={data["type"]}&pwd={data["pwd"]}&extra_content='
 
     try:
-        req = requests.post(uri, data=json.dumps(param), headers=headers)
+        req = requests.post(uri, data=datas, headers=headers)
         ress = json.loads(req.text)
         return ress
     except Exception as e:
@@ -287,22 +283,19 @@ def setbank(x, data):
 def proseswd(x, data):
     uri = "https://wjxwd01mwyo.dt01showxx02.com/App/Pay_Withdrawal/Apply"
     headers = {
-        "User-Agent": f"HS-Android Mozilla/5.0 (Linux; Android 8.1.0; SM-J730F Build/{random.randint(1000,9999)}; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/103.0.{random.randint(1000,9999)}.129 Mobile Safari/537.36",
+        "X-Ws-APM-Id":"44163685-B7A1-45D3-A3B0-EA4BD1BA38B6-458",
+        "User-Agent": f"HS-IOS_iOSLV2/2.10.4 (iPhone;iOS 15.5; Scale/3.00",
         "BundleIdentifier": "user",
-        "Accept-Encoding": "identity",
         "x-token": x,
+        "Accept-Encoding": "identity",
         "X-Version": persi,
-        "Content-Type": "application/json; charset=UTF-8",
+        "Content-Type": "application/x-www-form-urlencoded",
         "Host": "wjxwd01mwyo.dt01showxx02.com",
         "Connection": "Keep-Alive"
     }
-    param = data
-    prox = {
-        "https": input("proxy : ")
-    }
+    datas = f'money={data["money"]}&card_id={data["card_id"]}&pwd={data["pwd"]}'
     try:
-        req = requests.post(uri, data=json.dumps(
-            param), headers=headers, proxies=prox)
+        req = requests.post(uri, data=datas, headers=headers)
         ress = json.loads(req.text)
         return ress
     except Exception as e:
@@ -313,7 +306,7 @@ def proseswd(x, data):
 def getmsg(x):
     uriweb = "https://wjxwd01mwyo.dt01showxx02.com/App/Message/List?page1"
     headers = {
-        "user-agent": f"HS-Android Mozilla/5.0 (Linux; Android 8.1.0; SM-J730F Build/{random.randint(1000,9999)}; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/103.0.{random.randint(1000,9999)}.129 Mobile Safari/537.36",
+        "user-agent": f"HS-IOS_iOSLV2/2.10.4 (iPhone;iOS 15.5; Scale/3.00",
         "bundleidentifier": "user",
         "x-token": x,
         "accept-encoding": "identity",
@@ -341,7 +334,7 @@ def getrecord(x):
     waktu = input("waktunya [2022-08-04] :")
     uriweb = f"https://wjxwd01mwyo.dt01showxx02.com/App/Game_Order/GetBetList?date={waktu}&status=0&page=1"
     headers = {
-        "user-agent": f"HS-Android Mozilla/5.0 (Linux; Android 8.1.0; SM-J730F Build/{random.randint(1000,9999)}; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/103.0.{random.randint(1000,9999)}.129 Mobile Safari/537.36",
+        "user-agent": f"HS-IOS_iOSLV2/2.10.4 (iPhone;iOS 15.5; Scale/3.00",
         "bundleidentifier": "user",
         "x-token": x,
         "accept-encoding": "identity",
@@ -366,7 +359,7 @@ def getrecord(x):
 def getinfo(x):
     uriweb = "https://wjxwd01mwyo.dt01showxx02.com/App/User_User/Info"
     headers = {
-        "user-agent": f"HS-Android Mozilla/5.0 (Linux; Android 8.1.0; SM-J730F Build/{random.randint(1000,9999)}; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/103.0.{random.randint(1000,9999)}.129 Mobile Safari/537.36",
+        "user-agent": f"HS-IOS_iOSLV2/2.10.4 (iPhone;iOS 15.5; Scale/3.00",
         "bundleidentifier": "user",
         "x-token": x,
         "accept-encoding": "identity",
@@ -402,7 +395,7 @@ def getinfo(x):
 def getinfofull(x):
     uriweb = "https://wjxwd01mwyo.dt01showxx02.com/App/User_User/Info"
     headers = {
-        "user-agent": f"HS-Android Mozilla/5.0 (Linux; Android 8.1.0; SM-J730F Build/{random.randint(1000,9999)}; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/103.0.{random.randint(1000,9999)}.129 Mobile Safari/537.36",
+        "user-agent": f"HS-IOS_iOSLV2/2.10.4 (iPhone;iOS 15.5; Scale/3.00",
         "bundleidentifier": "user",
         "x-token": x,
         "accept-encoding": "identity",
@@ -429,7 +422,7 @@ def getinfofull(x):
 def getcashlog(x):
     uriweb = f"https://wjxwd01mwyo.dt01showxx02.com/App/User_User/CashLogList?page={input('page : ')}"
     headers = {
-        "user-agent": f"HS-Android Mozilla/5.0 (Linux; Android 8.1.0; SM-J730F Build/{random.randint(1000,9999)}; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/103.0.{random.randint(1000,9999)}.129 Mobile Safari/537.36",
+        "user-agent": f"HS-IOS_iOSLV2/2.10.4 (iPhone;iOS 15.5; Scale/3.00",
         "bundleidentifier": "user",
         "x-token": x,
         "accept-encoding": "identity",
@@ -456,7 +449,7 @@ def lvl(x):
         uriweb = "https://wjxwd01mwyo.dt01showxx02.com/App/Vip_Vip/MyVip"
         headers = {
             "x-ws-apm-id": "0068CBCA-9E03-4264-A904-EC90ADE4F434-259",
-            "user-agent": f"HS-Android Mozilla/5.0 (Linux; Android 8.1.0; SM-J730F Build/{random.randint(1000,9999)}; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/103.0.{random.randint(1000,9999)}.129 Mobile Safari/537.36",
+            "user-agent": f"HS-IOS_iOSLV2/2.10.4 (iPhone;iOS 15.5; Scale/3.00",
             "bundleidentifier": "user",
             "x-token": x,
             "accept-encoding": "identity",
@@ -477,7 +470,7 @@ def lvl(x):
 def tu(tkn, mett):
     uri = "https://wjxwd01mwyo.dt01showxx02.com/App/Pay_Recharge/Auto"
     headers = {
-        "User-Agent": f"HS-Android Mozilla/5.0 (Linux; Android 8.1.0; SM-J730F Build/{random.randint(1000,9999)}; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/103.0.{random.randint(1000,9999)}.129 Mobile Safari/537.36",
+        "User-Agent": f"HS-IOS_iOSLV2/2.10.4 (iPhone;iOS 15.5; Scale/3.00",
         "BundleIdentifier": "user",
         "x-token": tkn,
         "Accept-Encoding": "identity",
@@ -558,7 +551,7 @@ while True:
         token = tokk[0]
         uriweb = "https://wjxwd01mwyo.dt01showxx02.com/App/User_User/Info"
         headers = {
-            "user-agent": f"HS-Android Mozilla/5.0 (Linux; Android 8.1.0; SM-J730F Build/{random.randint(1000,9999)}; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/103.0.{random.randint(1000,9999)}.129 Mobile Safari/537.36",
+            "user-agent": f"HS-IOS_iOSLV2/2.10.4 (iPhone;iOS 15.5; Scale/3.00",
             "bundleidentifier": "user",
             "x-token": token,
             "accept-encoding": "identity",

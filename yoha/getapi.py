@@ -376,6 +376,7 @@ def registernodb(nomer, password, code):
 
 
 def getroom(token):
+    print(token)
     head = {
         "authorization": token,
         "host": "tech04.yoha.pro",
@@ -389,7 +390,7 @@ def getroom(token):
         "ip": aipi,
         "l": "in"
     }
-    uri = f'{data["api"]}live/list?type=0&page=1&per_page=200&last_ids=&v={persi}&ip={aipi}&l=in'
+    uri = f'{data["api"]}live/list?type=0&page=1&per_page=120&last_ids=&v={persi}&ip={aipi}&l=in'
     try:
         r = httpx.post(uri, params=param1, headers=head, timeout=5)
         if r.status_code == 200:

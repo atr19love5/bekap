@@ -10,8 +10,17 @@ from colorama import Fore, Style, init
 init()
 
 
-dat = {"roomid": "0", "pake": [], "ganjilgenap": 2}
-persi = seting.versi()
+awalun=int(input("mulai dari? default=0 : "))
+dat = {
+    "roomid": "0", 
+    "pake": [], 
+    "ganjilgenap": 2,
+    "aa":awalun,
+    "bb":awalun,
+    "tambahan":10,
+    "batasauto":int(input("batas auto : "))
+    }
+
 
 def tunggu(x):
     tz = pytz.timezone("Asia/Jakarta")
@@ -19,7 +28,7 @@ def tunggu(x):
     while True:
         now = datetime.now(tz)
         jamm = now.strftime("%H:%M:%S")
-        sys.stdout.write(f"  {jamm}/{x}  [{aa}:{bb}] \r")
+        sys.stdout.write(f"  {jamm}/{x}  [{dat['aa']}:{dat['bb']}]  \r")
         sys.stdout.flush()
         detik = now.strftime("%S")
         if int(detik)==int(x):
@@ -100,8 +109,6 @@ def roomgame(datrum):
 #                 rall.append(t)
 #     return rall
 
-tokens = []
-idroomarray=getlive.roomall()
 def getnum(x):
     uri = "https://wjxwd01mwyo.dt01showxx02.com/App/Game_Game/GetTypeInfo"
     headers = {
@@ -241,29 +248,7 @@ def getinfo(x):
         ]
         return krm
 
-jumtkn=ambil.token()
-print(f"jumlah semua token : {len(jumtkn)}")
-print("0 termasuk token[x:y]")
-try:
-    aa, bb = int(input("x : ")), int(input("y : "))
-except:
-    aa, bb = 0, 150
 
-
-token = jumtkn[aa:bb]
-jedascan=float(input("jeda scan : "))
-print("filtering...")
-ikl = 1
-for i in token:
-    ceking = getinfo(i)
-    if float(ceking[1]) >= 1.0:
-        tokens.append(i)
-    sys.stdout.write(f"\t {ikl} -> {len(tokens)}\r")
-    sys.stdout.flush()
-    ikl += 1
-    time.sleep(jedascan)
-
-print()
 # room = getlive.roomall()
 # room.append({"nickname": "lobby", "live_id": ""})
 
@@ -317,28 +302,48 @@ def pilter():
         sys.stdout.flush()
         time.sleep(jedascan)
     return valuecoin
-
-
-hehe = ["player", "banker"]
-
 while True:
-    tunggu(11)
-    try:
-        # input("SCAN")
-        if dat["ganjilgenap"] == 2:
-            dat["ganjilgenap"] = 1
-        else:
-            dat["ganjilgenap"] = 2
-        filtt=pilter()
-        if len(filtt)%2==1:
-            filtt.pop(0)
-            print("\npop : 0")
-        if len(filtt)!=0:
-            xkecil=min(filtt)
-        else:xkecil=1
-        itrr = len(dat["pake"])
-        print(f"<<<<<<<<<<<<<  {itrr} tokens Selected")
-        if itrr == 1 or itrr == 0:
+    # menentukan a dan b setiap session
+    if dat["bb"]==awalun:
+        dat["aa"]=awalun
+        dat["bb"]=dat["aa"]+dat["tambahan"]
+    else:
+        dat["aa"]+=dat["tambahan"]
+        dat["bb"]=dat["aa"]+dat["tambahan"]
+    print("\n\n\n\t\t[ New Session ]")
+    print(f"++ : {dat['tambahan']}")
+    print(f"a  : {dat['aa']}")
+    print(f"b  : {dat['bb']}")
+    dat["pake"]=[]
+    dat["roomid"]="0"
+    persi = seting.versi()
+    tokens = []
+    idroomarray=getlive.roomall()
+    jumtkn=ambil.token()
+    print(f"jumlah semua token : {len(jumtkn)}")
+    print("0 termasuk token[x:y]")
+
+    aa, bb = dat["aa"], dat["bb"]
+    token = jumtkn[aa:bb]
+    jedascan=float(0.3)
+    print("filtering...")
+    ikl = 1
+    for i in token:
+        ceking = getinfo(i)
+        if float(ceking[1]) >= 1.0:
+            tokens.append(i)
+        sys.stdout.write(f"\t {ikl} -> {len(tokens)}\r")
+        sys.stdout.flush()
+        ikl += 1
+        time.sleep(jedascan)
+
+    hehe = ["player", "banker"]
+    print("-----------------------------------------------------------")
+
+    while True:
+        tunggu(11)
+        try:
+            # input("SCAN")
             if dat["ganjilgenap"] == 2:
                 dat["ganjilgenap"] = 1
             else:
@@ -352,110 +357,127 @@ while True:
             else:xkecil=1
             itrr = len(dat["pake"])
             print(f"<<<<<<<<<<<<<  {itrr} tokens Selected")
-        if itrr % 2 != 0:
-            dat["pake"].pop(0)
-
-    except Exception as e:
-        print(f"Error : {e}")
-    itrr = len(dat["pake"])
-    print(f">>>>>>>>>>>>> {itrr} akun Betting")
-    if itrr==0:
-        print(f"Selesai [{aa}:{bb}]")
-        break
-
-    #cari nilai terkecil
-    print(f"terkecil = {xkecil}")
-    tunggu(random.randint(40,45))
-    # input("BET")
-    bett = str(xkecil)
-    if itrr != 0:
-        try:
-            gamevers = getnum(dat["pake"][0])
-        except Exception as e:
-            print(f"ERROR : {e}")
-        print(f"Game Version : {gamevers}")
-
-        # print(json.dumps(dat["pake"], indent=2))
-        jp, jb = [], []
-
-        gasbet = {}
-        for pola in range(itrr):
-            if pola % 2 == 0:
-                type = 0
-            else:
-                type = 1
-            tkn = dat["pake"][pola]
-            # untuk bet all in semuanya
-            # bet(tkn, hehe[type], dataakun[itr][1].split('.')[0])
-            # print(hehe[type], bett, gamevers)
-            if hehe[type] == "banker":
-                dataa = {
-                    "num": pola,
-                    "tipe": hehe[type],
-                    "tkn": tkn,
-                    "jum": bett,
-                    "verr": gamevers,
-                    "warna": "red"
-                }
-                gasbet[pola] = (dataa)
-            else:
-                dataa = {
-                    "num": pola,
-                    "tipe": hehe[type],
-                    "tkn": tkn,
-                    "jum": bett,
-                    "verr": gamevers,
-                    "warna": "blue"
-                }
-                gasbet[pola] = (dataa)
-
-        lennya = len(gasbet)-1
-        dahpick = []
-        tipebsoe=random.choice([1,2])
-        while len(gasbet) != 0:
-            # print(">>>>>>>>>>  "+str(len(gasbet)))
-            while True:
-                badak = random.randint(0, lennya)
-                if badak not in dahpick:
-                    dahpick.append(badak)
-                    break
-
-            dbt = gasbet[badak]
-            # print()
-            bettlol = betsic(dbt["tkn"], dbt["tipe"], dbt["jum"], dbt["verr"],tipebsoe)
-            # bettlol = {'msg': 'ok', 'code': 0, 'result': {'balance': dbt["jum"]}}
-            try:
-                if dbt["tipe"] == "player":
-                    jp.append(
-                        int("1"+str(bettlol["result"]["balance"].replace(".", ""))))
-                else:
-                    jb.append(
-                        int("1"+str(bettlol["result"]["balance"].replace(".", ""))))
-            except:
-                jp.append("000")
-
-            print(c(dbt["warna"], f"{str(badak)} >> {str(bettlol['result'])}", 0))
-            # print(bettlol)
-            if bettlol["result"]["room"]=="FAILED":
+            if itrr == 1 or itrr == 0:
                 if dat["ganjilgenap"] == 2:
                     dat["ganjilgenap"] = 1
                 else:
                     dat["ganjilgenap"] = 2
-                break
+                filtt=pilter()
+                if len(filtt)%2==1:
+                    filtt.pop(0)
+                    print("\npop : 0")
+                if len(filtt)!=0:
+                    xkecil=min(filtt)
+                else:xkecil=1
+                itrr = len(dat["pake"])
+                print(f"<<<<<<<<<<<<<  {itrr} tokens Selected")
+            if itrr % 2 != 0:
+                dat["pake"].pop(0)
 
-            del gasbet[badak]
-            time.sleep(jedascan)
+        except Exception as e:
+            print(f"Error : {e}")
+        itrr = len(dat["pake"])
+        print(f">>>>>>>>>>>>> {itrr} akun Betting")
+        if itrr==0:
+            print(f"Selesai [{aa}:{bb}]")
+            break
 
-        try:
-            apop = str(min(jb))
-            apop = apop[1::]
-            apop = (f"{apop[:1]}.{apop[1:5]}")
-            bpop = str(min(jp))
-            bpop = bpop[1::]
-            bpop = (f"{bpop[:1]}.{bpop[1:5]}")
+        #cari nilai terkecil
+        print(f"terkecil = {xkecil}")
+        tunggu(random.randint(40,45))
+        # input("BET")
+        bett = str(xkecil)
+        if itrr != 0:
+            try:
+                gamevers = getnum(dat["pake"][0])
+            except Exception as e:
+                print(f"ERROR : {e}")
+            print(f"Game Version : {gamevers}")
 
-            print(c("blue", f"\tif player : {apop}", 0))
-            print(c("red", f"\tif banker : {bpop}", 0))
-        except:
-            pass
-input("ghj")
+            # print(json.dumps(dat["pake"], indent=2))
+            jp, jb = [], []
+
+            gasbet = {}
+            for pola in range(itrr):
+                if pola % 2 == 0:
+                    type = 0
+                else:
+                    type = 1
+                tkn = dat["pake"][pola]
+                # untuk bet all in semuanya
+                # bet(tkn, hehe[type], dataakun[itr][1].split('.')[0])
+                # print(hehe[type], bett, gamevers)
+                if hehe[type] == "banker":
+                    dataa = {
+                        "num": pola,
+                        "tipe": hehe[type],
+                        "tkn": tkn,
+                        "jum": bett,
+                        "verr": gamevers,
+                        "warna": "red"
+                    }
+                    gasbet[pola] = (dataa)
+                else:
+                    dataa = {
+                        "num": pola,
+                        "tipe": hehe[type],
+                        "tkn": tkn,
+                        "jum": bett,
+                        "verr": gamevers,
+                        "warna": "blue"
+                    }
+                    gasbet[pola] = (dataa)
+
+            lennya = len(gasbet)-1
+            dahpick = []
+            tipebsoe=random.choice([1,2])
+            while len(gasbet) != 0:
+                # print(">>>>>>>>>>  "+str(len(gasbet)))
+                while True:
+                    badak = random.randint(0, lennya)
+                    if badak not in dahpick:
+                        dahpick.append(badak)
+                        break
+
+                dbt = gasbet[badak]
+                # print()
+                bettlol = betsic(dbt["tkn"], dbt["tipe"], dbt["jum"], dbt["verr"],tipebsoe)
+                # bettlol = {'msg': 'ok', 'code': 0, 'result': {'balance': dbt["jum"]}}
+                try:
+                    if dbt["tipe"] == "player":
+                        jp.append(
+                            int("1"+str(bettlol["result"]["balance"].replace(".", ""))))
+                    else:
+                        jb.append(
+                            int("1"+str(bettlol["result"]["balance"].replace(".", ""))))
+                except:
+                    jp.append("000")
+
+                print(c(dbt["warna"], f"{str(badak)} >> {str(bettlol['result'])}", 0))
+                # print(bettlol)
+                if bettlol["result"]["room"]=="FAILED":
+                    if dat["ganjilgenap"] == 2:
+                        dat["ganjilgenap"] = 1
+                    else:
+                        dat["ganjilgenap"] = 2
+                    break
+
+                del gasbet[badak]
+                time.sleep(jedascan)
+
+            try:
+                apop = str(min(jb))
+                apop = apop[1::]
+                apop = (f"{apop[:1]}.{apop[1:5]}")
+                bpop = str(min(jp))
+                bpop = bpop[1::]
+                bpop = (f"{bpop[:1]}.{bpop[1:5]}")
+
+                print(c("blue", f"\tif player : {apop}", 0))
+                print(c("red", f"\tif banker : {bpop}", 0))
+            except:
+                pass
+    
+    if dat["aa"]+dat["tambahan"]>len(jumtkn):
+        dat["aa"]=0
+        dat["tambahan"]+=dat["tambahan"]*2
